@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninja Board - Scorecards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <style>
+        .edit-link {
+            font-family: Overpass;
+            font-size: 6pt;
+            vertical-align: super;
+        }
+        .btn {
+            padding: 2px 12px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <h2>Scorecards</h2>
+        <div id="tableDiv">
+            <table id="example" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th align="left">Name</th>
+                        <th align="left">Total Points</th>
+                        <th align="left">Ninja Belt</th>
+                        <th align="left">Points to Next Level</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">User Scorecard</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="myform">
+                        <div class="form-group">
+                            <label for="userId" class="control-label">User ID:</label>
+                            <input id="userId" disabled name="userId" type="text" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="displayName" class="control-label">Display Name:</label>
+                            <input id="displayName" name="displayName" type="text" class="form-control">
+                        </div>
+                        <div id="editFieldsDiv"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    <button id="edit-ok" type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="update(); return false;">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        var idFieldName = "userId";
+
+        function edit2(id) {
+            document.getElementById("edit-ok").innerHTML = "Update";
+            fetch('/api/scorecard/' + id)
+                .then(response => response.json())
+                .then(json => {
+                    var form = document.getElementById("myform");
+                    $("#editFieldsDiv").empty();
+                    for (var propertyName in json) {
+                        if (json.hasOwnProperty(propertyName)) {
+                            if (propertyName === idFieldName || propertyName === "displayName") continue;
+                            var fieldName = propertyName;
+                            var fieldValue = json[propertyName];
+                            $("#editFieldsDiv").append('<div class="form-group"><label for="' + fieldName + '" class="control-label">' + fieldName + ':</label><input id="' + fieldName + '" name="' + fieldName + '" type="text" value="' + fieldValue + '" class="form-control"></div>');
+                        }
+                    }
+                    for (var i = 0, ii = form.length; i < ii; ++i) {
+                        if (typeof json[form[i].name] == "undefined") {
+                            form[i].value = "";
+                        } else {
+                            form[i].value = json[form[i].name];
+                        }
+                    }
+                });
+        }
+
+        function update() {
+            var data = {};
+            var op = "";
+            var form = document.getElementById("myform");
+            for (var i = 0, ii = form.length; i < ii; ++i) {
+                var input = form[i];
+                if (input.name == idFieldName) op = input.value;
+                if (input.name) {
+                    data[input.name] = input.value;
+                }
+            }
+            if (op == "") {
+                alert("ERROR: OP is empty!");
+                return;
+            }
+            fetch('/api/scorecard/' + op, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).then(() => {
+                $('#example').DataTable().destroy();
+                loadDataTable();
+            });
+        }
+
+        function loadDataTable() {
+            fetch('/api/scorecards')
+                .then(response => response.json())
+                .then(json => {
+                    var tableHeaders = "";
+                    var tableColumns = [];
+                    $.each(json.columns, function(i, val) {
+                        tableHeaders += "<th>" + val.title + "</th>";
+                        if (val.data == "level") {
+                            tableColumns.push({
+                                data: val.data,
+                                render: function(data, type, row) {
+                                    return "<span style='width:25px;height:25px;background-color:" + row['level'].toLowerCase() + "'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;" + row['level'].toLowerCase();
+                                }
+                            });
+                        } else {
+                            tableColumns.push({data: val.data});
+                        }
+                    });
+                    $("#tableDiv").empty();
+                    $("#tableDiv").append('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
+
+                    $('#example').DataTable({
+                        "data": json.data,
+                        "columns": tableColumns,
+                        "scrollCollapse": true,
+                        "paging": true,
+                        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
+                        "pageLength": 25,
+                        "searching": true,
+                        "order": [[1, "desc"]],
+                        "columnDefs": [{
+                            "targets": 0,
+                            "render": function(data, type, row) {
+                                return row["name"] + " <span class='edit-link'>(<a href='#' onclick='edit2(\"" + row["id"] + "\");' data-bs-toggle='modal' data-bs-target='#exampleModal'>edit</a>)</span>";
+                            }
+                        }]
+                    });
+                });
+        }
+
+        $(document).ready(function() {
+            loadDataTable();
+        });
+    </script>
+</body>
+</html>
+
