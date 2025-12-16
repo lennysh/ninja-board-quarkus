@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
@@ -30,14 +31,14 @@ public class ConfigProducer {
     }
 
     @Produces
-    @ApplicationScoped
+    @Dependent
     @Named("configFile")
     File configFile() {
         return new File(configFile);
     }
 
     @Produces
-    @ApplicationScoped
+    @Dependent
     @Named("databaseFile")
     File databaseFile() {
         return new File(databaseFile);

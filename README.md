@@ -44,7 +44,39 @@ See `src/main/resources/application.properties` for all configuration options.
 
 ## Building and Running
 
-### Development Mode
+### Using Podman (No Maven/Java Installation Required)
+
+The easiest way to run the application without installing Maven or Java is using the provided Podman script:
+
+```bash
+# Run in development mode (default)
+./run-with-podman.sh dev
+
+# Or simply (dev is the default)
+./run-with-podman.sh
+
+# Build the application
+./run-with-podman.sh build
+
+# Run in production mode (builds first if needed)
+./run-with-podman.sh prod
+
+# Clean build artifacts
+./run-with-podman.sh clean
+```
+
+The script uses Podman containers with Maven and Java, so you don't need to install anything on your machine. The application will be available at `http://localhost:8082`
+
+**Note**: Environment variables (like API tokens) set in your shell will be automatically passed to the container. Make sure to export them before running the script:
+
+```bash
+export TRELLO_API_TOKEN=your_token
+export GITHUB_API_TOKEN=your_token
+# ... etc
+./run-with-podman.sh dev
+```
+
+### Development Mode (If Maven is Installed)
 
 ```bash
 mvn quarkus:dev
@@ -52,7 +84,7 @@ mvn quarkus:dev
 
 The application will be available at `http://localhost:8082`
 
-### Production Build
+### Production Build (If Maven is Installed)
 
 ```bash
 mvn clean package
@@ -60,6 +92,10 @@ java -jar target/quarkus-app/quarkus-run.jar
 ```
 
 ## API Endpoints
+
+### Health/Status
+- `GET /api/status` - Get application status (returns JSON with status, version, timestamp)
+- `GET /api/ping` - Simple ping endpoint (returns "pong")
 
 ### Scorecards
 - `GET /api/scorecards` - Get all scorecards

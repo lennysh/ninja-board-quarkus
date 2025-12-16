@@ -19,6 +19,7 @@ import java.util.UUID;
 import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.redhat.sso.ninja.utils.IOUtils2;
@@ -29,6 +30,7 @@ import jakarta.inject.Named;
 
 @ApplicationScoped
 @Named("database")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Database2 {
     private static final Logger log = Logger.getLogger(Database2.class);
     

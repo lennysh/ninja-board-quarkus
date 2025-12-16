@@ -54,6 +54,25 @@ public class ManagementController {
         return "true".equalsIgnoreCase(config.getOptions().get("login.enabled"));
     }
 
+    @GET
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response status() {
+        Map<String, Object> status = new HashMap<>();
+        status.put("status", "UP");
+        status.put("application", "ninja-board");
+        status.put("version", "1.0.0");
+        status.put("timestamp", new Date().toString());
+        return Response.status(200).entity(status).build();
+    }
+
+    @GET
+    @Path("/ping")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response ping() {
+        return Response.status(200).entity("pong").build();
+    }
+
     @POST
     @Path("/yearEnd/{priorYear}")
     @Produces(MediaType.TEXT_PLAIN)

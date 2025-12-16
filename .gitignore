@@ -27,6 +27,9 @@ Thumbs.db
 # Application data
 target/ninja-persistence/
 
+# Maven cache (created by podman script)
+.m2/
+
 # Logs
 *.log
 
