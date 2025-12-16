@@ -73,6 +73,48 @@ public class ManagementController {
         return Response.status(200).entity("pong").build();
     }
 
+    @GET
+    @Path("/tokens/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response tokensStatus() {
+        Map<String, Object> status = new HashMap<>();
+        
+        // Check for API tokens (masked for security)
+        String[] tokenVars = {
+            "TRELLO_API_TOKEN", "TRELLO_API_KEY", "GITHUB_API_TOKEN", 
+            "GITLAB_API_TOKEN", "SMARTSHEETS_API_TOKEN", "GD_CREDENTIALS"
+        };
+        
+        Map<String, Object> tokens = new HashMap<>();
+        for (String var : tokenVars) {
+            String value = System.getenv(var);
+            if (value != null && !value.isEmpty()) {
+                // Show first 4 and last 4 characters, mask the middle
+                String masked = maskToken(value);
+                tokens.put(var, Map.of(
+                    "configured", true,
+                    "length", value.length(),
+                    "preview", masked
+                ));
+            } else {
+                tokens.put(var, Map.of("configured", false));
+            }
+        }
+        
+        status.put("tokens", tokens);
+        status.put("timestamp", new Date().toString());
+        
+        return Response.status(200).entity(status).build();
+    }
+    
+    private String maskToken(String token) {
+        if (token == null || token.length() <= 8) {
+            return "****";
+        }
+        // Show first 4 and last 4 characters
+        return token.substring(0, 4) + "..." + token.substring(token.length() - 4);
+    }
+
     @POST
     @Path("/yearEnd/{priorYear}")
     @Produces(MediaType.TEXT_PLAIN)

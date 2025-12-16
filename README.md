@@ -96,6 +96,7 @@ java -jar target/quarkus-app/quarkus-run.jar
 ### Health/Status
 - `GET /api/status` - Get application status (returns JSON with status, version, timestamp)
 - `GET /api/ping` - Simple ping endpoint (returns "pong")
+- `GET /api/tokens/status` - Check which API tokens are configured (returns masked token info for security)
 
 ### Scorecards
 - `GET /api/scorecards` - Get all scorecards
