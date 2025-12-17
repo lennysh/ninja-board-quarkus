@@ -1,0 +1,154 @@
+
+body {
+    font-family: "RedHatText",Helvetica,helvetica,arial,sans-serif;
+}
+textarea{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+table.dataTable tbody td{
+	padding: 6px 10px !important;
+}
+
+#main_nav .navbar-nav:not(.navbar-right) {
+    padding-right: 0rem;
+}
+
+.navbar{
+	width:100%;
+	min-height:25px !important;
+	background-color:#1f1f1f;
+	border-radius: 4px 4px 4px 4px !important;
+}
+.navbar-connector{
+	position: relative;
+	top: -22px;
+	left: 110px;
+	width: 100px;
+	height: 10px;
+	background-color: #1f1f1f;
+  -ms-transform: rotate(20deg); /* IE 9 */
+  -webkit-transform: rotate(20deg); /* Safari */
+  transform: rotate(20deg);
+}
+.navbar-title{
+  position:relative; 
+  left:163px;
+  top:-42px;
+  width: 50%;
+}
+.navbar-title-text{
+	background-color:#1f1f1f;
+	color:#eee;
+	font-size: 2.5rem;
+	padding: 0px 15px 0px 15px; 
+	border-radius: 0px 4px 4px 4px;
+}
+.navbar-title-user{
+	font-size: 1.5rem;
+	padding: 0px 15px 0px 15px; 
+	border-radius: 0px 4px 4px 4px;
+	height: 30px;
+}
+/*
+.navbar{width:100%;min-height:25px !important;background-color:#1f1f1f;border:0px solid #e7e7e7;}
+*/
+.navbar-left{position:relative;float:left;}
+.navbar-right{left:-20px;position:relative;float:right;}
+
+.navbar-nav{
+	position:relative;
+	top:0px;
+}
+.navbar-brand3{
+  position: relative;
+  top:6px;
+}
+.navbar-brand2 {
+  height: 50px;
+  padding: 15px 23px;
+  font-size: 1.8rem;
+  line-height: 20px;
+}
+
+.navbar-brand2 img[role=logo] {
+    width: 12rem;
+    height: 56px; /* Updated from rem to fit the tob bar sizing */
+}
+
+.navbar-brand2:hover,
+.navbar-brand2:focus {
+  text-decoration: none;
+}
+
+.menu-title{
+	font-size: 1.8rem;
+	padding-top: 21px !important;
+	padding-left: 5px !important;
+	padding-right: 5px !important;
+	/*
+	padding-bottom: 0px !important;
+	line-height: 35px !important;
+	
+	position: relative;
+	top: 8px;
+	*/
+}
+.nav>li>a{
+	padding-left: 0px;
+}
+
+.navbar-header a:link      {color:#FFE;}
+.navbar-header a:visited   {color:#FFE;}
+.navbar-header a:hover     {color:#CCC;}
+.navbar-header a:active    {color:#CCC;}
+.navbar-nav .dropdown a:link           {color:#FFF;}
+.navbar-nav .dropdown a:visited        {color:#FFF;}
+.navbar-nav .dropdown a:focus          {color:#333;}
+.navbar-nav .dropdown a:hover          {color:#333;}
+.navbar-nav .dropdown a:active         {color:#333;}
+.navbar-nav .dropdown-menu li a:link   {color:#333;}
+.navbar-nav .dropdown-menu li a:visited{color:#333;}
+.navbar-nav .dropdown-menu li a:hover  {color:#333;}
+.navbar-nav .dropdown-menu li a:active {color:#333;} 
+
+
+.btn-image:hover{opacity: .9}
+.btn-image{opacity: .8; width:30px; height:30px;background-position:-1px -1px;}
+
+/*OVERRIDING BOOTSTRAP CSS DEFAULTS*/
+.btn-primary{background-color:#444 !important;border:0px solid #e7e7e7 !important;}
+.btn-primary:hover{background-color:#333 !important;border:0px solid #e7e7e7 !important;}
+/*END OF OVERRIDING*/
+
+
+#solutions{position:relative; left:15px; top:0px; width:98%}
+#solutions tr th{background-color:#F5F5F5;}
+
+
+.graph{
+    width:1200px;
+	font-size: 1.2222222222em;
+}
+
+/*	background-color:#EEEEEE;*/
+.graph_header{
+  width: 100%;
+//	background-image: url("../images/graph_header.png");
+}
+.graph_header_main{
+	height: 60px;
+	padding: 20px;
+	color: #cc0000;
+	font-weight: 400;
+	font-size: 2.4rem;
+	text-align: left;
+}
+.graph_header_sub{
+	height: 50px;
+	padding: 20px;
+	color: #666666;
+	font-weight: normal;
+	font-size: 1.4rem;
+	text-align: left;
+}

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="cache-control" content="no-cache"/>
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	
+	<title>Communities of Practice - Tasks</title>
+	
+	<link href="css/jquery.dataTables.min.css" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="https://static.redhat.com/libs/redhat/redhat-font/2/webfonts/red-hat-font.css" media="all" />
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/style2.css" type="text/css">
+	<link rel="stylesheet" href="https://raw.githack.com/riktar/jkanban/master/dist/jkanban.min.css">
+	<link rel="stylesheet" href="css/tasks.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-jLuaxTTBR42U2qJ/pm4JRouHkEDHkVqH0T1nyQXn1mZ7Snycpf6Rl25VBNthU4z0" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+	
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/ChartNew.js"></script>
+	<script src="js/utils.js"></script>
+	<script src="js/http.js"></script>
+	<script src="js/jkanban.js"></script>
+	<script>
+		var jwtToken = "";
+		var contextPath = "";
+	</script>
+	
+	<style>
+        body {
+            font-family: "Lato";
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        #myKanban {
+            overflow-x: auto;
+            padding: 20px 0;
+            width: 95%;
+        }
+        .success {
+            background: #00B961;
+        }
+        .info {
+            background: #2A92BF;
+        }
+        .warning {
+            background: #F4CE46;
+        }
+        .error {
+            background: #FB7D44;
+        }
+    </style>
+</head>
+<body>
+
+<style>
+.container {
+    display: inline-block;
+    cursor: pointer;
+    width: 50px !important;
+}
+.bar1, .bar2, .bar3 {
+    width: 35px;
+    height: 4px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-5px, 8px) ;
+    transform: rotate(-45deg) translate(-5px, 8px) ;
+}
+.change .bar2 {
+    opacity: 0;
+}
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+    transform: rotate(45deg) translate(-8px, -8px) ;
+}
+.adjustment{
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+.adjustment>div{
+	padding: 10px 10px !important;
+}
+</style>
+<script>
+function myFunction(x) {
+    x.classList.toggle("change");
+}
+</script>
+
+<div id="main_nav" class="navbar">
+  <div class="navbar-header">
+    <a href="/" class="navbar-brand2"><img role="logo" src="images/logo.svg"/>
+    	<span class="navbar-brand3"></span>
+    </a>
+  </div>
+  <div class="collapse navbar-collapse bs-example-js-navbar-collapse">
+    <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="menu-title dropdown-toggle" href="#" id="drop2">
+          Ninja Program
+          <span class="caret"></span>
+        </a>
+        <ul aria-labelledby="drop2" class="dropdown-menu">
+          <li><a href="scorecards.html">Scorecards</a></li>
+          <li><a href="leaderboard.html">Leaderboard</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="tasks.html">Tasks</a></li>
+          <li><a href="https://docs.google.com/a/redhat.com/forms/d/e/1FAIpQLSdWGcCks2zKKnVoZFQz3CieLQDc1lsSex_Knwh_-eyRm0ZQTg/viewform">Registration Form</a></li>
+          <li><a href="https://docs.google.com/spreadsheets/d/1E91hT_ZpySyvhnANxqZ7hcBSM2EEd9TqfQF-cavB8hQ">Responses Spreadsheet</a></li>
+          <li><a href="support-trello-card.html">Support - Trello Query</a></li>
+          <li><a href="support-trello-all.html">Support - Trello Reconcilliation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="menu-title dropdown-toggle" href="#" id="drop2">
+          Admin
+          <span class="caret"></span>
+        </a>
+        <ul aria-labelledby="drop2" class="dropdown-menu">
+          <li><a href="config.html">Config (Here be dragons!)</a></li>
+          <li><a href="database.html">Database (Here be dragons!)</a></li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown" id="fat-menu">
+        <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle adjustment" href="#" id="drop3">
+          <div class="container" onclick="myFunction(this)" style="height:56px">
+					  <div class="bar1"></div>
+					  <div class="bar2"></div>
+					  <div class="bar3"></div>
+					</div>
+          <span class="caretx"></span>
+        </a>
+        <ul aria-labelledby="drop3" class="dropdown-menu">
+          <li><a href="api/logout">Log out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="navbar-connector"></div>
+<div class="navbar-title">
+	<h2><span class="navbar-title-text">Tasks</span></h2>
+</div>
+
+<div id="myKanban"></div>
+
+<script>
+$(document).ready(function() {
+	Http.httpGet("/api/tasks", function(response){
+		var j=JSON.parse(response);
+		var todo=j.todo;
+		var working=j.working;
+		var done=j.done;
+		
+		var id=0;
+		
+    var KanbanTest = new jKanban({
+        element: '#myKanban',
+        gutter: '10px',
+        widthBoard: '450px',
+        dragBoards: false,
+        contextMenu: true,
+        deleteCards: true,
+        comments: false,
+        userAssignment: false,
+        labels: true,
+        onLabelNew: function(el, nodeItem, addLabel){
+          console.log("onLabelNew():: el.value="+el.value+", el.dataset="+JSON.stringify(el.dataset) +", nodeItem="+JSON.stringify(nodeItem.dataset));
+          if (undefined==el.value || el.value=="") return;
+          Http.httpPost("/api/tasks/"+el.dataset.id+"/labels/"+el.value, null, function(response, status){
+            if (status==200)
+            	addLabel(el, el.dataset.id, el.value);
+          });
+        },
+        onLabelDelete: function(el, nodeItem, removeLabel){
+          console.log("onLabelDelete():: el="+JSON.stringify(el.dataset) +", nodeItem="+JSON.stringify(nodeItem.dataset));
+          Http.httpDelete("/api/tasks/"+el.dataset.id+"/labels/"+el.dataset.label, null, function(response, status){
+            if (status==200)
+            	removeLabel(el, el.dataset.id, el.value);
+          });
+        },
+        onUpdate: function(el, nodeItem, updateTitle){
+        	console.log("onUpdate():: el="+el.value +", nodeItem="+JSON.stringify(nodeItem.dataset));
+        	
+        	var data={"title":el.value};
+        	Http.httpPost("/api/tasks/"+nodeItem.dataset.eid, data, function(response, status){
+		   				if (status==200){
+		   					updateTitle(el, el.dataset.id, el.value);
+		   				}
+		    	});
+        },
+        onDelete: function(el){
+        	console.log("onDelete():: el="+JSON.stringify(el.dataset));
+        	Http.httpPost("/api/tasks/"+el.dataset.eid+"/delete", null, function(response){
+       				KanbanTest.removeElement(el.dataset.eid);
+        	});
+        },
+        customDisplay: function(boardId, el, data){
+        	console.log("customDisplay():: el="+JSON.stringify(el.dataset));
+        	return "<textarea id='title_"+data.id+"' style='height:10px' class='title'>"+data.title+"</textarea><br/><span style='border: 3px solid transparent'>"+data.timestamp.substring(0,10)+"</span>";
+        },
+        dropEl:function (el, target, source, sibling) {
+        	var taskGuid=el.dataset.eid;
+        	var taskTitle=el.innerText;
+        	var sourceBoardName=source.offsetParent.dataset.id;
+        	var targetBoardName=target.offsetParent.dataset.id;
+        	
+        	console.log("dragged from "+sourceBoardName+" to "+targetBoardName+" - title="+taskTitle+ " - guid="+taskGuid);
+        	
+        	var data={'list':targetBoardName};
+        	Http.httpPost("/api/tasks/"+taskGuid, data, function(response){
+        	});
+        },
+        addItemButton: false,
+        boards: [
+            {
+                "id": "_todo",
+                "title": "To Do",
+                "class": "info,good",
+                "item": todo
+            },
+            {
+                "id": "_working",
+                "title": "Working",
+                "class": "info,good",
+                "item": working
+            },
+            {
+                "id": "_done",
+                "title": "Done",
+                "class": "success",
+                "item": done
+            }
+        ]
+    });
+	});
+});
+</script>
+
+</body>
+</html>
+
